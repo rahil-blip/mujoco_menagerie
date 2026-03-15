@@ -49,6 +49,28 @@ base_link (PiPER arm, welded to arm_mount)
 - Arm joint position sensors (joint1-6 + gripper)
 - Gripper touch sensor
 - Camera frame pose (position + quaternion)
+- Magnetometer at base
+- Velocimeter at base
+
+## Store Environment
+
+The scene includes a simulated convenience store aisle with:
+- Two shelf units with multiple shelves at different heights
+- Graspable items (boxes, cans) on shelves with free joints
+- A fallen item on the floor as a cleaning target
+- Store walls forming an aisle corridor
+- Realistic floor friction for wheel traction
+
+## Testing
+
+Run the validation test suite:
+
+```bash
+cd honi_robot
+python test_honi.py
+```
+
+Tests include: home keyframe verification, forward driving, arm reach check, and sensor readout validation.
 
 ## Usage
 
@@ -74,6 +96,8 @@ mujoco.mj_step(model, data)
 
 - `honi_scene.xml` - Combined MJCF scene
 - `README.md` - This file
+- `honi_robot.yaml` - Robot configuration and metadata
+- `test_honi.py` - Simulation test and validation script
 
 ## License
 
