@@ -1,0 +1,95 @@
+<mujoco model="honi_robot">
+  <compiler angle="radian" meshdir="../agilex_piper/assets"/>
+  <option integrator="implicitfast" cone="elliptic" impratio="10"/>
+  <option timestep="0.002"/>
+
+  <include file="../agilex_piper/piper.xml"/>
+
+  <statistic center="0 0 0.3" extent="1.0"/>
+
+  <visual>
+    <headlight diffuse="0.6 0.6 0.6" ambient="0.3 0.3 0.3" specular="0 0 0"/>
+    <rgba haze="0.15 0.25 0.35 1"/>
+    <global azimuth="120" elevation="-20"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072"/>
+    <texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" markrgb="0.8 0.8 0.8" width="300" height="300"/>
+    <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5" reflectance="0.2"/>
+  </asset>
+
+  <worldbody>
+    <!-- Ground plane -->
+    <geom name="floor" size="0 0 0.05" type="plane" material="groundplane"/>
+    <light pos="0 0 1.5" dir="0 0 -1" directional="true"/>
+
+    <!-- Ranger Mini v3 Mobile Base -->
+    <body name="ranger_base" pos="0 0 0.19">
+      <freejoint name="base_free"/>
+      <inertial pos="0 0 0" mass="10" diaginertia="0.1354 0.2417 0.3085"/>
+
+      <!-- Base chassis -->
+      <geom name="chassis" type="box" size="0.25 0.175 0.1" rgba="0.3 0.3 0.3 1" mass="10"/>
+
+      <!-- Front-right wheel -->
+      <body name="fr_wheel" pos="0.25 -0.19 -0.1">
+        <joint name="fr_steering" type="hinge" axis="0 0 1" range="-2.1 2.1"/>
+        <body name="fr_wheel_roll">
+          <joint name="fr_drive" type="hinge" axis="0 1 0"/>
+          <geom type="cylinder" size="0.09 0.04" euler="1.5708 0 0" rgba="0.1 0.1 0.1 1" mass="8"/>
+        </body>
+      </body>
+
+      <!-- Front-left wheel -->
+      <body name="fl_wheel" pos="0.25 0.19 -0.1">
+        <joint name="fl_steering" type="hinge" axis="0 0 1" range="-2.1 2.1"/>
+        <body name="fl_wheel_roll">
+          <joint name="fl_drive" type="hinge" axis="0 1 0"/>
+          <geom type="cylinder" size="0.09 0.04" euler="1.5708 0 0" rgba="0.1 0.1 0.1 1" mass="8"/>
+        </body>
+      </body>
+
+      <!-- Rear-left wheel -->
+      <body name="rl_wheel" pos="-0.25 0.19 -0.1">
+        <joint name="rl_steering" type="hinge" axis="0 0 1" range="-2.1 2.1"/>
+        <body name="rl_wheel_roll">
+          <joint name="rl_drive" type="hinge" axis="0 1 0"/>
+          <geom type="cylinder" size="0.09 0.04" euler="1.5708 0 0" rgba="0.1 0.1 0.1 1" mass="8"/>
+        </body>
+      </body>
+
+      <!-- Rear-right wheel -->
+      <body name="rr_wheel" pos="-0.23 -0.206 -0.1">
+        <joint name="rr_steering" type="hinge" axis="0 0 1" range="-2.1 2.1"/>
+        <body name="rr_wheel_roll">
+          <joint name="rr_drive" type="hinge" axis="0 1 0"/>
+          <geom type="cylinder" size="0.09 0.04" euler="1.5708 0 0" rgba="0.1 0.1 0.1 1" mass="8"/>
+        </body>
+      </body>
+
+      <!-- Spine mount point (center of base, top) -->
+      <body name="spine_mount" pos="0 0 0.1">
+        <geom name="spine" type="cylinder" size="0.03 0.15" rgba="0.5 0.5 0.5 1" mass="2"/>
+
+        <!-- PiPER arm mount (top of spine) -->
+        <body name="arm_mount" pos="0 0 0.15">
+          <!-- Attach PiPER arm base_link here -->
+          <site name="piper_attachment" pos="0 0 0" size="0.02"/>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <!-- Actuators for base wheels -->
+  <actuator>
+    <velocity name="fr_drive_act" joint="fr_drive" kv="50"/>
+    <velocity name="fl_drive_act" joint="fl_drive" kv="50"/>
+    <velocity name="rl_drive_act" joint="rl_drive" kv="50"/>
+    <velocity name="rr_drive_act" joint="rr_drive" kv="50"/>
+    <position name="fr_steer_act" joint="fr_steering" kp="100"/>
+    <position name="fl_steer_act" joint="fl_steering" kp="100"/>
+    <position name="rl_steer_act" joint="rl_steering" kp="100"/>
+    <position name="rr_steer_act" joint="rr_steering" kp="100"/>
+  </actuator>
+</mujoco>
