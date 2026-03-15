@@ -1,0 +1,20 @@
+name: Test Honi Robot MJCF
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'honi_robot/**'
+
+jobs:
+  test-honi:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install MuJoCo
+        run: pip install mujoco numpy
+      - name: Run Honi Robot test
+        run: cd honi_robot && python test_honi.py
