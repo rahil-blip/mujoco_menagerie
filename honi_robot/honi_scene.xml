@@ -79,6 +79,7 @@
       <!-- Front-right wheel -->
       <body name="fr_wheel" pos="0.25 -0.19 -0.1">
         <joint name="fr_steering" type="hinge" axis="0 0 1" range="-2.1 2.1"/>
+                          <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
         <body name="fr_wheel_roll">
           <joint name="fr_drive" type="hinge" axis="0 1 0"/>
           <geom type="cylinder" size="0.09 0.04" euler="1.5708 0 0" rgba="0.1 0.1 0.1 1" mass="8" friction="1.5 0.005 0.0001"/>
@@ -87,6 +88,7 @@
       <!-- Front-left wheel -->
       <body name="fl_wheel" pos="0.25 0.19 -0.1">
         <joint name="fl_steering" type="hinge" axis="0 0 1" range="-2.1 2.1"/>
+                          <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
         <body name="fl_wheel_roll">
           <joint name="fl_drive" type="hinge" axis="0 1 0"/>
           <geom type="cylinder" size="0.09 0.04" euler="1.5708 0 0" rgba="0.1 0.1 0.1 1" mass="8" friction="1.5 0.005 0.0001"/>
@@ -95,6 +97,7 @@
       <!-- Rear-left wheel -->
       <body name="rl_wheel" pos="-0.25 0.19 -0.1">
         <joint name="rl_steering" type="hinge" axis="0 0 1" range="-2.1 2.1"/>
+                          <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
         <body name="rl_wheel_roll">
           <joint name="rl_drive" type="hinge" axis="0 1 0"/>
           <geom type="cylinder" size="0.09 0.04" euler="1.5708 0 0" rgba="0.1 0.1 0.1 1" mass="8" friction="1.5 0.005 0.0001"/>
@@ -103,6 +106,7 @@
       <!-- Rear-right wheel -->
       <body name="rr_wheel" pos="-0.25 -0.19 -0.1">
         <joint name="rr_steering" type="hinge" axis="0 0 1" range="-2.1 2.1"/>
+                          <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
         <body name="rr_wheel_roll">
           <joint name="rr_drive" type="hinge" axis="0 1 0"/>
           <geom type="cylinder" size="0.09 0.04" euler="1.5708 0 0" rgba="0.1 0.1 0.1 1" mass="8" friction="1.5 0.005 0.0001"/>
