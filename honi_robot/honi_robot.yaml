@@ -1,0 +1,64 @@
+# Honi Robot Configuration
+# Mobile manipulator for store cleaning operations
+
+robot:
+  name: honi_robot
+  description: "AgileX Ranger Mini v3 + PiPER arm mobile manipulator"
+  mjcf_path: honi_scene.xml
+
+base:
+  type: ranger_mini_v3
+  wheelbase: 0.50  # meters
+  track_width: 0.38  # meters
+  wheel_radius: 0.09  # meters
+  max_speed: 1.5  # m/s
+  steering_type: four_wheel_steer
+  steering_range: [-2.1, 2.1]  # radians
+
+arm:
+  type: agilex_piper
+  dof: 6
+  gripper_type: parallel_jaw
+  mount_height: 0.44  # meters from ground (base 0.19 + spine 0.25)
+  joints:
+    - name: joint1
+      range: [-2.618, 2.618]
+    - name: joint2
+      range: [0, 3.14]
+    - name: joint3
+      range: [-2.697, 0]
+    - name: joint4
+      range: [-1.832, 1.832]
+    - name: joint5
+      range: [-1.22, 1.22]
+    - name: joint6
+      range: [-3.14, 3.14]
+  gripper:
+    range: [0, 0.035]  # meters
+
+sensors:
+  imu:
+    site: piper_attachment
+    rate: 500  # Hz
+  cameras:
+    - name: head_camera
+      site: head_camera
+      resolution: [640, 480]
+      fov: 60
+  joint_sensors:
+    steering: [fr_steer_pos, fl_steer_pos, rl_steer_pos, rr_steer_pos]
+    drive: [fr_drive_vel, fl_drive_vel, rl_drive_vel, rr_drive_vel]
+    arm: [arm_j1_pos, arm_j2_pos, arm_j3_pos, arm_j4_pos, arm_j5_pos, arm_j6_pos]
+    gripper: [gripper_pos]
+
+simulation:
+  timestep: 0.002
+  integrator: implicitfast
+  solver: Newton
+
+policy:
+  framework: openpi
+  model: pi0_fast
+  action_space:
+    base: [fr_drive, fl_drive, rl_drive, rr_drive, fr_steering, fl_steering, rl_steering, rr_steering]
+    arm: [joint1, joint2, joint3, joint4, joint5, joint6, gripper]
