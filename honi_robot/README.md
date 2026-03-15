@@ -98,6 +98,36 @@ mujoco.mj_step(model, data)
 - `README.md` - This file
 - `honi_robot.yaml` - Robot configuration and metadata
 - `test_honi.py` - Simulation test and validation script
+## Store Environment
+
+The simulation includes a convenience store aisle environment:
+
+- **Shelf Unit A** (right side) - 3 shelf levels at 0.35m, 0.70m, 1.05m with product items
+- **Shelf Unit B** (left side) - 2 shelf levels with a fallen item nearby
+- **Checkout counter** - Counter at 0.85m height
+- **Floor debris** - Scattered items (cup, wrapper) as cleaning targets
+- **Spill marker** - Visual spill indicator on the floor
+- **Store walls** - Front and back walls defining the aisle
+
+## Keyframes
+
+| Name | Description |
+|------|-------------|
+| `home` | Default upright pose, arm tucked |
+| `reach_low` | Arm extended to low shelf (0.35m) |
+| `reach_mid` | Arm reaching mid shelf (0.70m) |
+| `reach_high` | Arm reaching high shelf (1.05m) |
+| `reach_floor` | Arm reaching down to floor level |
+
+## Sensors
+
+- Base IMU (accelerometer, gyroscope, magnetometer)
+- Base velocimeter
+- Wheel steering positions (4x) and drive velocities (4x)
+- Arm joint positions (joints 1-6 + gripper)
+- Gripper touch sensor
+- Camera pose (position + quaternion)
+
 
 ## License
 
