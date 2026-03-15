@@ -104,6 +104,30 @@ def test_sensor_readout(model, data):
     print("  PASS")
 
 
+def test_reach_keyframes(model, data):
+    """Test all reach keyframes and report end-effector positions."""
+    print("[TEST] Reach keyframes...")
+    ee_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "link6")
+    if ee_id < 0:
+        print("  SKIP - link6 body not found")
+        return
+
+    keyframe_names = ["reach_low", "reach_mid", "reach_high", "reach_floor"]
+    target_heights = [0.35, 0.70, 1.05, 0.05]  # shelf heights in meters
+
+    for i, name in enumerate(keyframe_names):
+        kf_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_KEY, name)
+        if kf_id < 0:
+            print(f"  SKIP - keyframe '{name}' not found")
+            continue
+        mujoco.mj_resetDataKeyframe(model, data, kf_id)
+        mujoco.mj_forward(model, data)
+        ee_pos = data.xpos[ee_id].copy()
+        print(f"  {name}: EE at [{ee_pos[0]:.3f}, {ee_pos[1]:.3f}, {ee_pos[2]:.3f}]")
+        print(f"    Target height: {target_heights[i]:.2f}m, Actual: {ee_pos[2]:.3f}m")
+
+    print("  PASS")
+
 def main():
     model, data = load_model()
     print_model_info(model)
@@ -111,6 +135,7 @@ def main():
     test_drive_forward(model, data)
     test_arm_reach(model, data)
     test_sensor_readout(model, data)
+      test_reach_keyframes(model, data)
     print()
     print("All tests passed!")
 
