@@ -1,5 +1,5 @@
 <mujoco model="honi_robot">
-  <compiler angle="radian" meshdir="../agilex_piper/assets"/>
+      <compiler angle="radian"/>
   <option integrator="implicitfast" cone="elliptic" impratio="10"/>
   <option timestep="0.002"/>
 
@@ -23,9 +23,9 @@
     <material name="item_green" rgba="0.2 0.7 0.2 1"/>
     <material name="item_blue" rgba="0.2 0.2 0.8 1"/>
             <!-- Custom part meshes (from Onshape export) -->
-        <mesh name="base_platform_mesh" file="../../honi_robot/assets/base_platform.stl" scale="1 1 1"/>
-        <mesh name="spine_column_mesh" file="../../honi_robot/assets/spine_column.stl" scale="1 1 1"/>
-        <mesh name="arm_plate_mesh" file="../../honi_robot/assets/arm_mounting_plate.stl" scale="1 1 1"/>
+                <mesh name="base_platform_mesh" file="assets/base_platform.stl" scale="1 1 1"/>
+                <mesh name="spine_column_mesh" file="assets/spine_column.stl" scale="1 1 1"/>
+                <mesh name="arm_plate_mesh" file="assets/arm_mounting_plate.stl" scale="1 1 1"/>
   </asset>
 
   <worldbody>
