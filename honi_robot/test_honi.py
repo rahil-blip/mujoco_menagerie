@@ -135,7 +135,7 @@ def main():
     test_drive_forward(model, data)
     test_arm_reach(model, data)
     test_sensor_readout(model, data)
-      test_reach_keyframes(model, data)
+    test_reach_keyframes(model, data)
     print()
     print("All tests passed!")
 
