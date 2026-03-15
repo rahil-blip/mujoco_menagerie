@@ -1,5 +1,5 @@
 <mujoco model="honi_robot">
-          <compiler angle="radian" meshdir="../agilex_piper/assets"/>
+        <compiler angle="radian" meshdir="../agilex_piper/assets"/>
   <option integrator="implicitfast" cone="elliptic" impratio="10"/>
   <option timestep="0.002"/>
 
@@ -22,7 +22,7 @@
     <material name="item_red" rgba="0.8 0.2 0.2 1"/>
     <material name="item_green" rgba="0.2 0.7 0.2 1"/>
     <material name="item_blue" rgba="0.2 0.2 0.8 1"/>
-    </asset>
+  </asset>
 
   <worldbody>
     <!-- Ground plane -->
@@ -40,19 +40,20 @@
       <geom name="shelf_a_s1" type="box" size="0.38 0.23 0.005" pos="0 0 0.35" material="shelf_mat"/>
       <geom name="shelf_a_s2" type="box" size="0.38 0.23 0.005" pos="0 0 0.7" material="shelf_mat"/>
       <geom name="shelf_a_s3" type="box" size="0.38 0.23 0.005" pos="0 0 1.05" material="shelf_mat"/>
-      <!-- Items on shelf A -->
-      <body name="item_a1" pos="-0.15 0 0.38">
-        <freejoint name="item_a1_free"/>
-        <geom name="box_a1" type="box" size="0.04 0.04 0.03" material="item_red" mass="0.3"/>
-      </body>
-      <body name="item_a2" pos="0.1 0 0.38">
-        <freejoint name="item_a2_free"/>
-        <geom name="box_a2" type="box" size="0.03 0.05 0.04" material="item_green" mass="0.2"/>
-      </body>
-      <body name="item_a3" pos="0 0 0.73">
-        <freejoint name="item_a3_free"/>
-        <geom name="can_a3" type="cylinder" size="0.025 0.05" material="item_blue" mass="0.35"/>
-      </body>
+    </body>
+
+    <!-- Items on shelf A (absolute positions = shelf_a pos + relative pos) -->
+    <body name="item_a1" pos="1.35 -1.2 0.38">
+      <freejoint name="item_a1_free"/>
+      <geom name="box_a1" type="box" size="0.04 0.04 0.03" material="item_red" mass="0.3"/>
+    </body>
+    <body name="item_a2" pos="1.6 -1.2 0.38">
+      <freejoint name="item_a2_free"/>
+      <geom name="box_a2" type="box" size="0.03 0.05 0.04" material="item_green" mass="0.2"/>
+    </body>
+    <body name="item_a3" pos="1.5 -1.2 0.73">
+      <freejoint name="item_a3_free"/>
+      <geom name="can_a3" type="cylinder" size="0.025 0.05" material="item_blue" mass="0.35"/>
     </body>
 
     <!-- Shelf unit B (left side) -->
@@ -60,11 +61,12 @@
       <geom name="shelf_b_frame" type="box" size="0.4 0.25 0.7" pos="0 0 0.7" material="shelf_mat"/>
       <geom name="shelf_b_s1" type="box" size="0.38 0.23 0.005" pos="0 0 0.35" material="shelf_mat"/>
       <geom name="shelf_b_s2" type="box" size="0.38 0.23 0.005" pos="0 0 0.7" material="shelf_mat"/>
-      <!-- Fallen item on floor (cleaning target) -->
-      <body name="fallen_item" pos="0.3 0.8 0.03">
-        <freejoint name="fallen_free"/>
-        <geom name="fallen_box" type="box" size="0.05 0.03 0.03" material="item_red" mass="0.25"/>
-      </body>
+    </body>
+
+    <!-- Fallen item on floor (cleaning target) - absolute pos = shelf_b(-1.5,-1.2,0) + (0.3,0.8,0.03) -->
+    <body name="fallen_item" pos="-1.2 -0.4 0.03">
+      <freejoint name="fallen_free"/>
+      <geom name="fallen_box" type="box" size="0.05 0.03 0.03" material="item_red" mass="0.25"/>
     </body>
 
     <!-- Ranger Mini v3 Mobile Base -->
@@ -72,71 +74,57 @@
       <freejoint name="base_free"/>
       <inertial pos="0 0 0" mass="10" diaginertia="0.1354 0.2417 0.3085"/>
       <site name="base_imu" pos="0 0 0" size="0.01"/>
-
       <!-- Base chassis -->
       <geom name="chassis" type="box" size="0.25 0.175 0.1" rgba="0.3 0.3 0.3 1" mass="10" friction="1.0 0.005 0.0001"/>
 
       <!-- Front-right wheel -->
       <body name="fr_wheel" pos="0.25 -0.19 -0.1">
         <joint name="fr_steering" type="hinge" axis="0 0 1" range="-2.1 2.1"/>
-                          <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
+        <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
         <body name="fr_wheel_roll">
           <joint name="fr_drive" type="hinge" axis="0 1 0"/>
           <geom type="cylinder" size="0.09 0.04" euler="1.5708 0 0" rgba="0.1 0.1 0.1 1" mass="8" friction="1.5 0.005 0.0001"/>
         </body>
       </body>
+
       <!-- Front-left wheel -->
       <body name="fl_wheel" pos="0.25 0.19 -0.1">
         <joint name="fl_steering" type="hinge" axis="0 0 1" range="-2.1 2.1"/>
-                          <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
+        <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
         <body name="fl_wheel_roll">
           <joint name="fl_drive" type="hinge" axis="0 1 0"/>
           <geom type="cylinder" size="0.09 0.04" euler="1.5708 0 0" rgba="0.1 0.1 0.1 1" mass="8" friction="1.5 0.005 0.0001"/>
         </body>
       </body>
+
       <!-- Rear-left wheel -->
       <body name="rl_wheel" pos="-0.25 0.19 -0.1">
         <joint name="rl_steering" type="hinge" axis="0 0 1" range="-2.1 2.1"/>
-                          <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
+        <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
         <body name="rl_wheel_roll">
           <joint name="rl_drive" type="hinge" axis="0 1 0"/>
           <geom type="cylinder" size="0.09 0.04" euler="1.5708 0 0" rgba="0.1 0.1 0.1 1" mass="8" friction="1.5 0.005 0.0001"/>
         </body>
       </body>
+
       <!-- Rear-right wheel -->
       <body name="rr_wheel" pos="-0.25 -0.19 -0.1">
         <joint name="rr_steering" type="hinge" axis="0 0 1" range="-2.1 2.1"/>
-                          <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
+        <inertial pos="0 0 0" mass="0.1" diaginertia="0.001 0.001 0.001"/>
         <body name="rr_wheel_roll">
           <joint name="rr_drive" type="hinge" axis="0 1 0"/>
           <geom type="cylinder" size="0.09 0.04" euler="1.5708 0 0" rgba="0.1 0.1 0.1 1" mass="8" friction="1.5 0.005 0.0001"/>
         </body>
       </body>
 
-      <!-- Spine mount point (center of base, top) -->
-      <body name="spine_mount" pos="0 0 0.1">
-        <geom name="spine" type="cylinder" size="0.03 0.15" rgba="0.5 0.5 0.5 1" mass="2"/>
-        <!-- Arm mounting plate (top of spine) -->
-        <body name="arm_mount" pos="0 0 0.15">
-          <geom name="arm_plate" type="box" size="0.075 0.05 0.01" rgba="0.4 0.4 0.6 1" mass="0.5"/>
-          <site name="piper_attachment" pos="0 0 0.01" size="0.02"/>
-          <!-- Camera mount -->
-          <site name="head_camera" pos="0.05 0 0.05" euler="0 0.3 0" size="0.01" type="box" rgba="0 0.5 0 0.5"/>
-        </body>
-      </body>
+      <!-- Piper arm attachment point -->
+      <site name="arm_base" pos="0 0 0.1" size="0.01"/>
+      <site name="piper_attachment" pos="0 0 0.1" size="0.02"/>
     </body>
+
+    <!-- Head camera site -->
+    <site name="head_camera" pos="0.3 0 0.35" size="0.01"/>
   </worldbody>
-
-  <!-- Weld PiPER arm to mount -->
-  <equality>
-    <weld body1="arm_mount" body2="base_link" relpose="0 0 0.01 1 0 0 0"/>
-  </equality>
-
-  <!-- Contact exclusions -->
-  <contact>
-    <exclude body1="ranger_base" body2="spine_mount"/>
-    <exclude body1="spine_mount" body2="arm_mount"/>
-  </contact>
 
   <!-- Sensors -->
   <sensor>
@@ -185,14 +173,14 @@
 
   <!-- Home keyframe -->
   <keyframe>
-    <key name="honi_home" qpos="0 0 0.19 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1.57 -1.3485 0 0 0 0 0 0 0 0.03 1 0 0 0 0 0 0.38 1 0 0 0 0 0 0.38 1 0 0 0 0 0 0.73 1 0 0 0 0 0 0.03 1 0 0 0"/>
-        <!-- Reach test: arm extended forward to shelf A low (0.35m) -->
-    <key name="reach_low" qpos="0 0 0.19 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0.8 -1.5 0 -0.3 0 0 0 0 0.03 1 0 0 0 0 0 0.38 1 0 0 0 0 0 0.38 1 0 0 0 0 0 0.73 1 0 0 0 0 0 0.03 1 0 0 0"/>
+    <key name="honi_home" qpos="0 0 0.19 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1.57 -1.3485 0 0 0 0 0 0 0 0.03 1 0 0 0 0 0.38 1 0 0 0 0 0.38 1 0 0 0 0 0.73 1 0 0 0 0 0.03 1 0 0 0 0"/>
+    <!-- Reach test: arm extended forward to shelf A low (0.35m) -->
+    <key name="reach_low" qpos="0 0 0.19 1 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0.8 -1.5 0 -0.3 0 0 0 0 0.03 1 0 0 0 0 0.38 1 0 0 0 0 0.38 1 0 0 0 0 0.73 1 0 0 0 0 0.03 1 0 0 0 0"/>
     <!-- Reach test: arm reaching shelf A mid (0.7m) -->
-    <key name="reach_mid" qpos="0 0 0.19 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1.0 0.3 -0.8 0 -0.5 0 0 0 0 0.03 1 0 0 0 0 0 0.38 1 0 0 0 0 0 0.38 1 0 0 0 0 0 0.73 1 0 0 0 0 0 0.03 1 0 0 0"/>
+    <key name="reach_mid" qpos="0 0 0.19 1 0 0 0 0 0 0 0 0 0 0 0 0 1.0 0.3 -0.8 0 -0.5 0 0 0 0 0.03 1 0 0 0 0 0.38 1 0 0 0 0 0.38 1 0 0 0 0 0.73 1 0 0 0 0 0.03 1 0 0 0 0"/>
     <!-- Reach test: arm reaching shelf A high (1.05m) -->
-    <key name="reach_high" qpos="0 0 0.19 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1.57 0.1 -0.3 0 -0.8 0 0 0 0 0.03 1 0 0 0 0 0 0.38 1 0 0 0 0 0 0.38 1 0 0 0 0 0 0.73 1 0 0 0 0 0 0.03 1 0 0 0"/>
+    <key name="reach_high" qpos="0 0 0.19 1 0 0 0 0 0 0 0 0 0 0 0 0 1.57 0.1 -0.3 0 -0.8 0 0 0 0 0.03 1 0 0 0 0 0.38 1 0 0 0 0 0.38 1 0 0 0 0 0.73 1 0 0 0 0 0.03 1 0 0 0 0"/>
     <!-- Reach test: arm picking from floor -->
-    <key name="reach_floor" qpos="0 0 0.19 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.8 -2.0 0 0.5 0 0 0 0 0.03 1 0 0 0 0 0 0.38 1 0 0 0 0 0 0.38 1 0 0 0 0 0 0.73 1 0 0 0 0 0 0.03 1 0 0 0"/>
+    <key name="reach_floor" qpos="0 0 0.19 1 0 0 0 0 0 0 0 0 0 0 0 0 1.8 -2.0 0.5 0 0 0 0 0 0 0.03 1 0 0 0 0 0.38 1 0 0 0 0 0.38 1 0 0 0 0 0.73 1 0 0 0 0 0.03 1 0 0 0 0"/>
   </keyframe>
 </mujoco>
