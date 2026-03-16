@@ -53,17 +53,37 @@ def print_model_info(model):
   print(f"  Geoms:     {model.ngeom}")
   print(f"  Timestep:  {model.opt.timestep}s")
   print()
+  # Print joint ordering for debugging
+  print("Joint ordering (name -> qposadr):")
+  for i in range(model.njnt):
+    name = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_JOINT, i)
+    adr = model.jnt_qposadr[i]
+    jtype = model.jnt_type[i]
+    type_names = {0: "free", 1: "ball", 2: "slide", 3: "hinge"}
+    tname = type_names.get(jtype, f"type{jtype}")
+    print(f"  [{i}] {name}: qposadr={adr}, type={tname}")
+  print()
+  # Print keyframe ordering
+  print("Keyframe ordering:")
+  for i in range(model.nkey):
+    name = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_KEY, i)
+    print(f"  [{i}] {name}")
+  print()
 
 
 def test_home_keyframe(model, data):
   """Reset to home keyframe and verify."""
   print("[TEST] Home keyframe...")
   base_adr = get_base_qposadr(model)
+  print(f"  base_free qposadr = {base_adr}")
   kf_id = get_keyframe_id(model, "honi_home")
+  print(f"  honi_home keyframe id = {kf_id}")
   mujoco.mj_resetDataKeyframe(model, data, kf_id)
   mujoco.mj_forward(model, data)
+  # Print first 51 qpos values for debugging
+  print(f"  qpos[0:51] = {list(data.qpos[:51])}")
   base_z = data.qpos[base_adr + 2]
-  print(f"  Base height: {base_z:.3f}m")
+  print(f"  Base height (qpos[{base_adr + 2}]): {base_z:.3f}m")
   assert base_z > 0.1, f"Base too low: {base_z}"
   print("  PASS")
 
