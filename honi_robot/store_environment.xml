@@ -1,0 +1,133 @@
+<!--
+  Honi Robot v2.1 - Virtual Store Environment
+  A miniature grocery store with 2 aisles, 4 shelf units,
+  product items, floor, walls, and lighting.
+  Includes the Honi robot (v2.1 scene) for simulation.
+-->
+<mujoco model="honi_store">
+  <include file="honi_scene_v2.1.xml"/>
+
+  <option timestep="0.002" gravity="0 0 -9.81"/>
+
+  <visual>
+    <headlight ambient="0.3 0.3 0.3" diffuse="0.6 0.6 0.6"/>
+    <rgba haze="0.15 0.25 0.35 1"/>
+  </visual>
+
+  <asset>
+    <!-- Floor and wall materials -->
+    <texture name="floor_tile" type="2d" builtin="checker" width="512" height="512" rgb1="0.9 0.9 0.9" rgb2="0.8 0.8 0.85"/>
+    <material name="mat_floor" texture="floor_tile" texrepeat="8 8" reflectance="0.1"/>
+    <material name="mat_wall" rgba="0.95 0.95 0.92 1"/>
+    <material name="mat_shelf" rgba="0.4 0.3 0.2 1"/>
+    <material name="mat_shelf_back" rgba="0.35 0.25 0.15 1"/>
+    <material name="mat_item_red" rgba="0.9 0.2 0.1 1"/>
+    <material name="mat_item_green" rgba="0.1 0.8 0.2 1"/>
+    <material name="mat_item_blue" rgba="0.1 0.3 0.9 1"/>
+    <material name="mat_item_yellow" rgba="0.95 0.85 0.1 1"/>
+  </asset>
+
+  <worldbody>
+    <!-- Store Floor (6m x 4m) -->
+    <geom name="store_floor" type="plane" size="3 2 0.01" material="mat_floor"/>
+
+    <!-- Walls -->
+    <body name="wall_north" pos="0 2 1">
+      <geom type="box" size="3 0.05 1" material="mat_wall"/>
+    </body>
+    <body name="wall_south" pos="0 -2 1">
+      <geom type="box" size="3 0.05 1" material="mat_wall"/>
+    </body>
+    <body name="wall_east" pos="3 0 1">
+      <geom type="box" size="0.05 2 1" material="mat_wall"/>
+    </body>
+    <body name="wall_west" pos="-3 0 1">
+      <geom type="box" size="0.05 2 1" material="mat_wall"/>
+    </body>
+
+    <!-- ===== AISLE 1 (y = -1.0) ===== -->
+    <!-- Shelf Unit A (left side of aisle 1) -->
+    <body name="shelf_A" pos="1.0 -0.6 0">
+      <!-- Shelf frame -->
+      <geom name="shelf_A_back" type="box" pos="0 0 0.75" size="0.5 0.02 0.75" material="mat_shelf_back"/>
+      <!-- Low shelf -->
+      <geom name="shelf_A_low" type="box" pos="0 0.15 0.3" size="0.5 0.2 0.015" material="mat_shelf"/>
+      <!-- Mid shelf -->
+      <geom name="shelf_A_mid" type="box" pos="0 0.15 0.7" size="0.5 0.2 0.015" material="mat_shelf"/>
+      <!-- High shelf -->
+      <geom name="shelf_A_high" type="box" pos="0 0.15 1.1" size="0.5 0.2 0.015" material="mat_shelf"/>
+      <!-- Items on low shelf -->
+      <body name="item_A1" pos="-0.2 0.15 0.36">
+        <geom type="box" size="0.04 0.04 0.045" material="mat_item_red"/>
+      </body>
+      <body name="item_A2" pos="0.0 0.15 0.36">
+        <geom type="box" size="0.04 0.04 0.045" material="mat_item_green"/>
+      </body>
+      <body name="item_A3" pos="0.2 0.15 0.36">
+        <geom type="box" size="0.04 0.04 0.045" material="mat_item_blue"/>
+      </body>
+      <!-- Items on mid shelf -->
+      <body name="item_A4" pos="-0.15 0.15 0.76">
+        <geom type="cylinder" size="0.03 0.05" material="mat_item_yellow"/>
+      </body>
+      <body name="item_A5" pos="0.15 0.15 0.76">
+        <geom type="cylinder" size="0.03 0.05" material="mat_item_red"/>
+      </body>
+      <!-- Items on high shelf -->
+      <body name="item_A6" pos="0.0 0.15 1.16">
+        <geom type="box" size="0.05 0.03 0.045" material="mat_item_blue"/>
+      </body>
+    </body>
+
+    <!-- Shelf Unit B (right side of aisle 1) -->
+    <body name="shelf_B" pos="1.0 -1.4 0">
+      <geom name="shelf_B_back" type="box" pos="0 0 0.75" size="0.5 0.02 0.75" material="mat_shelf_back"/>
+      <geom name="shelf_B_low" type="box" pos="0 -0.15 0.3" size="0.5 0.2 0.015" material="mat_shelf"/>
+      <geom name="shelf_B_mid" type="box" pos="0 -0.15 0.7" size="0.5 0.2 0.015" material="mat_shelf"/>
+      <geom name="shelf_B_high" type="box" pos="0 -0.15 1.1" size="0.5 0.2 0.015" material="mat_shelf"/>
+      <body name="item_B1" pos="-0.2 -0.15 0.36">
+        <geom type="box" size="0.04 0.04 0.045" material="mat_item_yellow"/>
+      </body>
+      <body name="item_B2" pos="0.1 -0.15 0.36">
+        <geom type="box" size="0.04 0.04 0.045" material="mat_item_green"/>
+      </body>
+      <body name="item_B3" pos="0.0 -0.15 0.76">
+        <geom type="cylinder" size="0.03 0.05" material="mat_item_blue"/>
+      </body>
+    </body>
+
+    <!-- ===== AISLE 2 (y = 1.0) ===== -->
+    <!-- Shelf Unit C -->
+    <body name="shelf_C" pos="1.0 0.6 0">
+      <geom name="shelf_C_back" type="box" pos="0 0 0.75" size="0.5 0.02 0.75" material="mat_shelf_back"/>
+      <geom name="shelf_C_low" type="box" pos="0 0.15 0.3" size="0.5 0.2 0.015" material="mat_shelf"/>
+      <geom name="shelf_C_mid" type="box" pos="0 0.15 0.7" size="0.5 0.2 0.015" material="mat_shelf"/>
+      <geom name="shelf_C_high" type="box" pos="0 0.15 1.1" size="0.5 0.2 0.015" material="mat_shelf"/>
+      <body name="item_C1" pos="-0.1 0.15 0.36">
+        <geom type="box" size="0.05 0.04 0.04" material="mat_item_red"/>
+      </body>
+      <body name="item_C2" pos="0.15 0.15 0.76">
+        <geom type="cylinder" size="0.025 0.06" material="mat_item_green"/>
+      </body>
+    </body>
+
+    <!-- Shelf Unit D -->
+    <body name="shelf_D" pos="1.0 1.4 0">
+      <geom name="shelf_D_back" type="box" pos="0 0 0.75" size="0.5 0.02 0.75" material="mat_shelf_back"/>
+      <geom name="shelf_D_low" type="box" pos="0 -0.15 0.3" size="0.5 0.2 0.015" material="mat_shelf"/>
+      <geom name="shelf_D_mid" type="box" pos="0 -0.15 0.7" size="0.5 0.2 0.015" material="mat_shelf"/>
+      <body name="item_D1" pos="0.0 -0.15 0.36">
+        <geom type="box" size="0.04 0.04 0.045" material="mat_item_yellow"/>
+      </body>
+      <body name="item_D2" pos="-0.2 -0.15 0.76">
+        <geom type="cylinder" size="0.03 0.05" material="mat_item_blue"/>
+      </body>
+    </body>
+
+    <!-- Overhead lights -->
+    <light name="light_aisle1" pos="1.0 -1.0 2.5" dir="0 0 -1" diffuse="0.8 0.8 0.8" specular="0.3 0.3 0.3"/>
+    <light name="light_aisle2" pos="1.0 1.0 2.5" dir="0 0 -1" diffuse="0.8 0.8 0.8" specular="0.3 0.3 0.3"/>
+    <light name="light_entrance" pos="-1.0 0.0 2.5" dir="0 0 -1" diffuse="0.7 0.7 0.7"/>
+
+  </worldbody>
+</mujoco>
