@@ -216,4 +216,9 @@
         <key name="spine_high" qpos="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.4 1.35 -1.2 0.38 1 0 0 0 1.6 -1.2 0.38 1 0 0 0 1.5 -1.2 0.73 1 0 0 0 0.5 -0.5 0.05 1 0 0 0 -0.4 0.03 1 0 0"/>
     </keyframe>
 
+            <!-- Weld PiPER arm base_link to crossbar mount (rigid attachment) -->
+    <equality>
+        <weld body1="base_link" body2="crossbar_mount" relpose="0 0 0.015 1 0 0 0"/>
+    </equality>
+
 </mujoco>
