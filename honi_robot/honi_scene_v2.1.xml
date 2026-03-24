@@ -3,8 +3,6 @@
     <option integrator="implicitfast" cone="elliptic" impratio="10"/>
     <option timestep="0.002"/>
 
-    <include file="../agilex_piper/piper.xml"/>
-
     <statistic center="0 0 0.5" extent="2.5"/>
 
     <visual>
@@ -69,14 +67,14 @@
             <geom name="fallen_box" type="box" size="0.04 0.03 0.05" material="item_red" mass="0.25"/>
         </body>
 
-        <!-- ============================================ -->
+        <!-- ============================================= -->
         <!-- Honi Robot v2.1: Mecanum Base + Telescoping Spine -->
-        <!-- ============================================ -->
+        <!-- ============================================= -->
         <body name="ranger_base" pos="0 0 0.15">
             <freejoint name="base_free"/>
             <inertial pos="0 0 0" mass="25" diaginertia="0.5 0.5 0.3"/>
             <site name="base_imu" pos="0 0 0" size="0.01"/>
-            <geom name="chassis" type="box" size="0.36 0.24 0.08" rgba="0.2 0.2 0.2 1" mass="20" friction="0.8 0.005 0.0001"/>
+            <geom name="chassis" type="box" size="0.25 0.2 0.05" rgba="0.2 0.2 0.2 1" mass="20" friction="0.8 0.005 0.0001"/>
 
             <!-- Front-right mecanum wheel -->
             <body name="fr_wheel_steer" pos="0.2 -0.18 -0.08">
@@ -122,24 +120,31 @@
                 </body>
             </body>
 
-            <!-- ======= TELESCOPING SPINE ASSEMBLY (v2.1 NEW) ======= -->
-            <!-- Outer Spine Tube: fixed to chassis center, 40mm OD x 300mm tall -->
+            <!-- ======= TELESCOPING SPINE ASSEMBLY (v2.1) ======= -->
+            <!-- Outer Spine Tube: fixed to chassis center -->
+            <!-- CAD: 6061-T6 Al, OD=40mm, ID=34mm, L=300mm, m=0.283kg -->
             <body name="outer_spine" pos="0 0 0.08">
-                <geom name="outer_spine_tube" type="cylinder" size="0.02 0.15" rgba="0.3 0.3 0.3 1" mass="1.5"/>
-                <inertial pos="0 0 0" mass="1.5" diaginertia="0.01 0.01 0.001"/>
+                <geom name="outer_spine_tube" type="cylinder" size="0.02 0.15" rgba="0.3 0.3 0.3 1" mass="0.283"/>
+                <inertial pos="0 0 0" mass="0.283" diaginertia="0.00217 0.00217 0.0000975"/>
 
                 <!-- Inner Spine Tube: slides inside outer tube via prismatic joint -->
+                <!-- CAD: 6061-T6 Al, OD=30mm, ID=24mm, L=400mm, m=0.275kg -->
                 <body name="inner_spine" pos="0 0 0.15">
-                    <joint name="spine_extend" type="slide" axis="0 0 1" range="0 0.4" damping="50" stiffness="200"/>
-                    <geom name="inner_spine_tube" type="cylinder" size="0.015 0.2" rgba="0.2 0.2 0.5 1" mass="1.0"/>
-                    <inertial pos="0 0 0" mass="1.0" diaginertia="0.008 0.008 0.0005"/>
+                    <joint name="spine_extend" type="slide" axis="0 0 1" range="0 0.395" damping="50" stiffness="200"/>
+                    <geom name="inner_spine_tube" type="cylinder" size="0.015 0.2" rgba="0.2 0.2 0.5 1" mass="0.275"/>
+                    <inertial pos="0 0 0" mass="0.275" diaginertia="0.00369 0.00369 0.0000507"/>
 
                     <!-- Crossbar Shoulder Mount: T-bar for dual arm mounting -->
+                    <!-- CAD: 6061-T6 Al, ~280x50x40mm, m~0.8kg -->
                     <body name="crossbar_mount" pos="0 0 0.2">
-                        <geom name="crossbar" type="box" size="0.15 0.025 0.015" rgba="0.4 0.4 0.4 1" mass="0.8"/>
-                        <inertial pos="0 0 0" mass="0.8" diaginertia="0.002 0.002 0.001"/>
+                        <geom name="crossbar" type="box" size="0.14 0.025 0.02" rgba="0.4 0.4 0.4 1" mass="0.8"/>
+                        <inertial pos="0 0 0" mass="0.8" diaginertia="0.000273 0.00533 0.00539"/>
 
-                        <!-- PiPER arm attachment sites -->
+                        <!-- ======= PiPER ARM (nested under crossbar_mount) ======= -->
+                        <!-- FIX: arm now properly parented to crossbar instead of worldbody+weld -->
+                        <include file="../agilex_piper/piper.xml"/>
+
+                        <!-- PiPER arm attachment sites (matched to CAD frames) -->
                         <site name="arm_base" pos="0 0 0.015" size="0.01"/>
                         <site name="piper_attachment" pos="0 0 0.015" size="0.02"/>
                         <!-- Left arm mount -->
@@ -174,7 +179,7 @@
         <jointvel name="fl_drive_vel" joint="fl_drive"/>
         <jointvel name="rl_drive_vel" joint="rl_drive"/>
         <jointvel name="rr_drive_vel" joint="rr_drive"/>
-        <!-- Spine telescope position (v2.1 NEW) -->
+        <!-- Spine telescope position (v2.1) -->
         <jointpos name="spine_extend_pos" joint="spine_extend"/>
         <!-- Arm joint sensors -->
         <jointpos name="arm_j1_pos" joint="joint1"/>
@@ -201,24 +206,24 @@
         <position name="fl_steer_act" joint="fl_steering" kp="100" ctrlrange="-2.1 2.1"/>
         <position name="rl_steer_act" joint="rl_steering" kp="100" ctrlrange="-2.1 2.1"/>
         <position name="rr_steer_act" joint="rr_steering" kp="100" ctrlrange="-2.1 2.1"/>
-        <!-- Spine telescope actuator (v2.1 NEW) -->
-        <position name="spine_extend_act" joint="spine_extend" kp="500" ctrlrange="0 0.4"/>
+        <!-- Spine telescope actuator (v2.1) - PD position control -->
+        <position name="spine_extend_act" joint="spine_extend" kp="500" kv="100" ctrlrange="0 0.395"/>
     </actuator>
 
     <!-- Home keyframe -->
     <keyframe>
         <!-- qpos order: base_free(7), 8 wheel joints, spine_extend(1), arm joint1-6 + joint7-8(gripper), 4 item freejoints(28) = 52 total -->
         <!-- spine_extend=0 means fully retracted -->
-        <key name="honi_home" qpos="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.35 -1.2 0.38 1 0 0 0 1.6 -1.2 0.38 1 0 0 0 1.5 -1.2 0.73 1 0 0 0 0.5 -0.5 0.05 1 0 0 0 -0.4 0.03 1 0 0"/>
+        <key name="honi_home" qpos="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.35 -1.2 0.38 1 0 0 0 1.6 -1.2 0.38 1 0 0 0 1.5 -1.2 0.73 1 0 0 0 1.5 -1.2 0.73 1 0 0 0 0.5 -0.5 0.05 1 0 0 0"/>
         <!-- Spine extended to 0.2m for mid-height reach -->
-        <key name="spine_mid" qpos="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 1.35 -1.2 0.38 1 0 0 0 1.6 -1.2 0.38 1 0 0 0 1.5 -1.2 0.73 1 0 0 0 0.5 -0.5 0.05 1 0 0 0 -0.4 0.03 1 0 0"/>
-        <!-- Spine fully extended to 0.4m for high shelf reach -->
-        <key name="spine_high" qpos="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.4 1.35 -1.2 0.38 1 0 0 0 1.6 -1.2 0.38 1 0 0 0 1.5 -1.2 0.73 1 0 0 0 0.5 -0.5 0.05 1 0 0 0 -0.4 0.03 1 0 0"/>
+        <key name="spine_mid" qpos="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0 0 1.35 -1.2 0.38 1 0 0 0 1.6 -1.2 0.38 1 0 0 0 1.5 -1.2 0.73 1 0 0 0 1.5 -1.2 0.73 1 0 0 0 0.5 -0.5 0.05 1 0 0 0"/>
+        <!-- Spine fully extended to 0.395m for high shelf reach -->
+        <key name="spine_high" qpos="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.395 0 0 1.35 -1.2 0.38 1 0 0 0 1.6 -1.2 0.38 1 0 0 0 1.5 -1.2 0.73 1 0 0 0 1.5 -1.2 0.73 1 0 0 0 0.5 -0.5 0.05 1 0 0 0"/>
     </keyframe>
 
-            <!-- Weld PiPER arm base_link to crossbar mount (rigid attachment) -->
-    <equality>
-        <weld body1="base_link" body2="crossbar_mount" relpose="0 0 0.015 1 0 0 0"/>
-    </equality>
+    <!-- Contact exclusions -->
+    <contact>
+        <exclude body1="base_link" body2="crossbar_mount"/>
+    </contact>
 
 </mujoco>
